@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webinaire IA - Approvisionnement Municipal | Carange Solutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --noir: #212121;
+    --blanc: #ffffff;
+    --gris-pale: #f5f6f6;
+    --sauge: #bac8c3;
+    --bleu: #7184BC;
+    --vert-munia: #87c189;
+    --orange: #eda687;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--blanc);
+    color: var(--noir);
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+}
+
+.presentation-container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.slide {
+    width: 100%;
+    height: 100%;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    overflow: hidden;
+}
+
+.slide.active {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+}
+
+/* Container interne avec scaling automatique */
+.slide > * {
+    transform-origin: top center;
+}
+
+.slide-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2vh 4vw 1.5vh 4vw;
+    border-bottom: 2px solid var(--gris-pale);
+    flex-shrink: 0;
+}
+
+.logo {
+    height: 5vh;
+    width: auto;
+}
+
+.slide-number {
+    display: none;
+}
+
+.slide-title {
+    font-size: clamp(1.8rem, 3.5vh, 3rem);
+    font-weight: 700;
+    color: var(--noir);
+    margin-bottom: 1.5vh;
+    line-height: 1.2;
+}
+
+.slide-subtitle {
+    font-size: clamp(1rem, 2vh, 1.5rem);
+    color: var(--bleu);
+    font-weight: 500;
+    margin-bottom: 2vh;
+    line-height: 1.3;
+}
+
+.slide-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1vh 4vw 8vh 4vw;
+    overflow: hidden;
+    max-height: calc(100vh - 20vh);
+}
+
+.content-text {
+    font-size: clamp(0.85rem, 1.6vh, 1.1rem);
+    line-height: 1.5;
+    color: var(--noir);
+}
+
+.highlight {
+    background: var(--vert-munia);
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    color: var(--blanc);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.accent-box {
+    background: var(--gris-pale);
+    padding: clamp(0.8rem, 2vh, 1.5rem);
+    border-radius: 8px;
+    border-left: 5px solid var(--vert-munia);
+    margin: 1.5vh 0;
+}
+
+.accent-box h3 {
+    font-size: clamp(0.95rem, 1.8vh, 1.3rem);
+    margin-bottom: 1vh;
+}
+
+.accent-box p, .accent-box ul {
+    font-size: clamp(0.8rem, 1.5vh, 1rem);
+}
+
+.stat-big {
+    font-size: clamp(2.5rem, 6vh, 4.5rem);
+    font-weight: 700;
+    color: var(--vert-munia);
+    text-align: center;
+    margin: 1vh 0;
+}
+
+.icon-list {
+    list-style: none;
+    padding: 0;
+}
+
+.icon-list li {
+    margin: 0.8vh 0;
+    padding-left: 1.8em;
+    position: relative;
+    font-size: clamp(0.8rem, 1.5vh, 1rem);
+    line-height: 1.4;
+}
+
+.icon-list li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--vert-munia);
+    font-weight: 700;
+    font-size: 1.1em;
+}
+
+.comparison-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2vw;
+    margin: 1.5vh 0;
+}
+
+.comparison-column h3 {
+    color: var(--bleu);
+    font-size: clamp(1rem, 1.8vh, 1.3rem);
+    margin-bottom: 1vh;
+    padding-bottom: 0.8vh;
+    border-bottom: 2px solid var(--gris-pale);
+}
+
+.financial-box {
+    background: var(--gris-pale);
+    padding: 2vh 2vw;
+    border-radius: 8px;
+    text-align: center;
+    margin: 1vh 0;
+}
+
+.financial-amount {
+    font-size: clamp(1.5rem, 3.5vh, 2.5rem);
+    font-weight: 700;
+    color: var(--vert-munia);
+    margin: 1vh 0;
+}
+
+.navigation {
+    position: fixed;
+    bottom: 2vh;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 1vw;
+    z-index: 1000;
+}
+
+.nav-button {
+    background: var(--vert-munia);
+    color: var(--blanc);
+    border: none;
+    padding: 0.8vh 1.5vw;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: clamp(0.8rem, 1.5vh, 1rem);
+    transition: all 0.3s ease;
+}
+
+.nav-button:hover {
+    background: var(--bleu);
+    transform: translateY(-2px);
+}
+
+.nav-button:disabled {
+    background: var(--sauge);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.slide-indicator {
+    position: fixed;
+    top: 2vh;
+    right: 2vw;
+    background: var(--gris-pale);
+    padding: 0.8vh 1.2vw;
+    border-radius: 20px;
+    font-size: clamp(0.75rem, 1.4vh, 0.9rem);
+    color: var(--noir);
+    font-weight: 500;
+    z-index: 1000;
+}
+
+.slide-title-page {
+    text-align: center;
+    justify-content: center;
+}
+
+.slide-title-page .slide-title {
+    font-size: clamp(2rem, 5vh, 4rem);
+    margin-bottom: 2vh;
+}
+
+.slide-title-page .slide-subtitle {
+    font-size: clamp(1.2rem, 2.5vh, 2rem);
+    color: var(--bleu);
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2vw;
+    margin: 1.5vh 0;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5vw;
+    margin: 1.5vh 0;
+}
+
+.info-box {
+    background: var(--gris-pale);
+    padding: 1.5vh 1vw;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.info-box h3, .info-box h4 {
+    margin-bottom: 0.8vh;
+    color: var(--bleu);
+    font-size: clamp(0.9rem, 1.6vh, 1.1rem);
+}
+
+.info-box p {
+    font-size: clamp(0.75rem, 1.4vh, 0.95rem);
+}
+
+.info-box .amount {
+    font-size: clamp(1.1rem, 2vh, 1.5rem);
+    font-weight: 600;
+    color: var(--vert-munia);
+    margin: 0.8vh 0;
+}
+
+.step-box {
+    background: var(--gris-pale);
+    padding: 1.5vh 1.5vw;
+    border-radius: 8px;
+    margin: 1vh 0;
+    border-left: 5px solid var(--bleu);
+}
+
+.step-box h4 {
+    color: var(--bleu);
+    margin-bottom: 0.8vh;
+    font-size: clamp(0.9rem, 1.6vh, 1.1rem);
+}
+
+.step-box p {
+    font-size: clamp(0.8rem, 1.4vh, 0.95rem);
+    margin: 0.5vh 0;
+}
+
+.step-box ul {
+    margin-top: 0.8vh;
+}
+
+/* Suppression totale du scroll */
+.slide-content * {
+    overflow: visible;
+}
+
+/* Ajustements pour très petits écrans en hauteur */
+@media (max-height: 700px) {
+    .slide-header {
+        padding: 1vh 3vw 1vh 3vw;
+    }
+    
+    .logo {
+        height: 4vh;
+    }
+    
+    .slide-content {
+        padding: 0.5vh 3vw 6vh 3vw;
+        max-height: calc(100vh - 15vh);
+    }
+    
+    .icon-list li {
+        margin: 0.5vh 0;
+    }
+    
+    .grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide.active .slide-title,
+.slide.active .slide-subtitle,
+.slide.active .accent-box {
+    animation: fadeInUp 0.6s ease-out;
+}
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1 - Titre -->
+        <div class="slide active slide-title-page">
+            <div class="slide-content">
+                <img src="https://raw.githubusercontent.com/mtozzi-munia/marketing/main/assets/logo-rect-black.png" alt="Munia" class="logo" style="margin: 0 auto 40px;">
+                <h1 class="slide-title">ACCÉLÉRER L'APPROVISIONNEMENT MUNICIPAL</h1>
+                <h2 class="slide-subtitle">Passer plus de temps à décider, moins à chercher</h2>
+                <div style="margin-top: 40px; font-size: 24px; color: var(--noir);">
+                    <p><strong>Compte rendu du webinaire</strong></p>
+                    <p>Carange Solutions | Décembre 2025</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2 - Qui sommes-nous -->
+        <div class="slide">
+            <div class="slide-header">
+                <img src="https://raw.githubusercontent.com/mtozzi-munia/marketing/main/assets/logo-rect-black.png" alt="Munia" class="logo">
+            </div>
+            <div class="slide-content">
+                <h1 class="slide-title">QUI SOMMES-NOUS?</h1>
+                <h2 class="slide-subtitle">Carange Solutions : expertise municipale québécoise</h2>
+                <div class="comparison-table">
+                    <div>
+                        <div class="accent-box">
+                            <h3 style="color: var(--bleu); margin-bottom: 15px;">🏛️ Notre expérience</h3>
+                            <ul class="icon-list">
+                                <li>4 ans d'expertise en IA municipale</li>
+                                <li><span class="highlight">80 à 90 municipalités</span> accompagnées</li>
+                                <li>Repentigny, Bromont, Mascouche, Saint-Ulric...</li>
+                                <li>Formation d'élus et employés municipaux</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="accent-box">
+                            <h3 style="color: var(--bleu); margin-bottom: 15px;">⚡ Notre mission</h3>
+                            <p style="font-size: 22px; font-weight: 600; margin-bottom: 20px;">
+                                Utiliser le dollar du citoyen québécois en accompagnant les municipalités à produire plus avec moins.
+                            </p>
+                            <p style="margin-top: 15px;">
+                                <strong>Solution phare:</strong> MUNIA, l'IA souveraine québécoise pour municipalités
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3 - L'enjeu -->
+        <div class="slide">
+            <div class="slide-header">
+                <img src="https://raw.githubusercontent.com/mtozzi-munia/marketing/main/assets/logo-rect-black.png" alt="Munia" class="logo">
+            </div>
+            <div class="slide-content">
+                <h1 class="slide-title">L'ENJEU CENTRAL</h1>
+                <h2 class="slide-subtitle">Gagner du temps pour mieux décider</h2>
+                <div class="accent-box">
+                    <h3 style="color: var(--noir); margin-bottom: 15px;">📋 Le constat</h3>
+                    <p>Les processus d'approvisionnement sont chronophages et complexes. Recherche d'information, rédaction de devis, analyse d'offres, production de documents... les employés passent beaucoup de temps sur des tâches répétitives qui ralentissent la prise de décision stratégique.</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
+                    <div style="background: var(--gris-pale); padding: 25px; border-radius: 12px; border-left: 5px solid var(--orange);">
+                        <h3 style="color: var(--noir); margin-bottom: 10px;">❌ Sans IA</h3>
+                        <p>Tâches répétitives, recherches longues, risques d'erreurs, lenteur décisionnelle</p>
+                    </div>
+                    <div style="background: var(--gris-pale); padding: 25px; border-radius: 12px; border-left: 5px solid var(--vert-munia);">
+                        <h3 style="color: var(--noir); margin-bottom: 10px;">✓ Avec IA</h3>
+                        <p>Automatisation des tâches à faible valeur ajoutée, focus sur l'analyse et la décision</p>
+                    </div>
+                </div>
+                <div class="accent-box" style="margin-top: 30px; background: var(--vert-munia); color: var(--blanc);">
+                    <p style="font-size: 24px; font-weight: 600; text-align: center;">
+                        Principe clé: « Human in the loop » — L'IA assiste, l'humain décide
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4 - Le processus en 6 étapes -->
+        <div class="slide">
+            <div class="slide-header">
+                <img src="https://raw.githubusercontent.com/mtozzi-munia/marketing/main/assets/logo-rect-black.png" alt="Munia" class="logo">
+            </div>
+            <div class="slide-content">
+                <h1 class="slide-title">LE PROCESSUS D'APPROVISIONNEMENT OPTIMISÉ</h1>
+                <h2 class="slide-subtitle">6 étapes assistées par l'intelligence artificielle</h2>
+                <div class="grid-3">
+                    <div class="info-box">
+                        <h4>1️⃣ Recherche d'information</h4>
+                        <p>Identification du bon processus d'approvisionnement</p>
+                    </div>
+                    <div class="info-box">
+                        <h4>2️⃣ Devis technique</h4>
+                        <p>Rédaction structurée avec normes applicables</p>
+                    </div>
+                    <div class="info-box">
+                        <h4>3️⃣ Grille d'analyse</h4>
+                        <p>Création automatique avec pondération</p>
+                    </div>
+                    <div class="info-box">
+                        <h4>4️⃣ Analyse d'offres</h4>
+                        <p>Comparaison de soumissions volumineuses</p>
+                    </div>
+                    <div class="info-box">
+                        <h4>5️⃣ Sommaire décisionnel</h4>
+                        <p>Document formel pour décideurs</p>
+                    </div>
+                    <div class="info-box">
+                        <h4>6️⃣ Résolution</h4>
+                        <p>Génération conforme aux standards légaux</p>
+                    </div>
+                </div>
+                <div class="accent-box" style="margin-top: 30px;">
+                    <p style="text-align: center; font-weight: 600;">
+                        Chaque étape démontrée en direct lors du webinaire avec un cas réel: achat d'une rétro-excavatrice de 375 000\$
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5 - Étape 1: Recherche -->
+        <div class="slide">
+            <div class="slide-header">
+                <img src="https://raw.githubusercontent.com/mtozzi-munia/marketing/main/assets/logo-rect-black.png" alt="Munia" class="logo">
+            </div>
+            <div class="slide-content">
+                <h1 class="slide-title">ÉTAPE 1 : RECHERCHE D'INFORMATION</h1>
+                <h2 class="slide-subtitle">Assistant intelligent pour identifier le bon processus</h2>
+                <div class="step-box">
+                    <h4>❓ Problématique</h4>
+                    <p>Un employé nouveau ou peu familier doit identifier le processus d'approvisionnement applicable (exemple: achat d'une rétro-excavatrice).</p>
+                </div>
+                <div class="step-box" style="border-left-color: var(--vert-munia);">
+                    <h4>✅ Solution IA démontrée</h4>
+                    <ul class="icon-list">
+                        <li>L'assistant MUNIA guide via un arbre décisionnel personnalisé</li>
+                        <li>Intègre politiques internes + LCOM + Code municipal</li>
+                        <li>Réponses vocales ou écrites acceptées</li>
+                        <li>Propose <span class="highlight">plusieurs stratégies</span> d'approvisionnement</li>
+                    </ul>
+                </div>
+                <div class="accent-box">
+                    <p style="font-size: 20px;"><strong>Résultat:</strong> En quelques secondes, recommandations conformes avec références aux sources consultées</p>
+                    <p style="margin-top: 15px;">Exemple: Système de pondération vs plus bas soumissionnaire conforme</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6 - Étapes 2 et 3 -->
+        <div class="slide">
+            <div class="slide-header">
+                <img src="https://raw.githubusercontent.com/mtozzi-munia/marketing/main/assets/logo-rect-black.png" alt="Munia" class="logo">
+            </div>
+            <div class="slide-content">
+                <h1 class="slide-title">ÉTAPES 2 & 3 : DEVIS ET GRILLE D'ANALYSE</h1>
+                <h2 class="slide-subtitle">De la rédaction technique à l'évaluation structurée</h2>
+                <div class="comparison-table">
+                    <div>
+                        <div class="step-box">
+                            <h4>📝 ÉTAPE 2: Devis technique</h4>
+                            <p><strong>Problématique:</strong> Rédiger un devis complet exige des recherches sur caractéristiques fonctionnelles, specs techniques et normes.</p>
+                            <p style="margin-top: 15px;"><strong>Solution:</strong></p>
+                            <ul class="icon-list">
+                                <li>Génération structurée du devis</li>
+                                <li>Identification normes pertinentes</li>
+                                <li>Meilleures pratiques du marché</li>
+                            </ul>
+                            <p style="margin-top: 15px; color: var(--vert-munia); font-weight: 600;">
+                                ⚡ Heures de recherche → Minutes
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="step-box">
+                            <h4>📊 ÉTAPE 3: Grille d'analyse</h4>
+                            <p><strong>Problématique:</strong> Établir une grille cohérente avec critères de pondération pour comparer soumissions.</p>
+                            <p style="margin-top: 15px;"><strong>Solution:</strong></p>
+                            <ul class="icon-list">
+                                <li>Génération auto à partir du devis</li>
+                                <li>Critères et échelles clairs</li>
+                                <li>Conforme à méthode choisie</li>
+                            </ul>
+                            <p style="margin-top: 15px; color: var(--vert-munia); font-weight: 600;">
+                                ✓ Uniformité, transparence, équité
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7 - Étape 4: Le wow -->
+        <div class="slide">
+            <div class="slide-header">
+                <img src="https://raw.githubusercontent.com/mtozzi-munia/marketing/main/assets/logo-rect-black.png" alt="Munia" class="logo">
+            </div>
+            <div class="slide-content">
+                <h1 class="slide-title">ÉTAPE 4 : ANALYSE D'OFFRES DE SERVICES</h1>
+                <h2 class="slide-subtitle">La démonstration qui a impressionné</h2>
+                <div class="accent-box" style="background: var(--vert-munia); color: var(--blanc);">
+                    <h3 style="margin-bottom: 15px;">🚀 Performance démontrée en direct</h3>
+                    <div class="stat-big" style="color: var(--blanc);">160 pages</div>
+                    <p style="text-align: center; font-size: 22px; margin-bottom: 10px;">analysées en quelques secondes</p>
+                </div>
+                <div class="grid-2" style="margin-top: 30px;">
+                    <div>
+                        <h4 style="color: var(--bleu); margin-bottom: 15px;">⚙️ Ce que l'IA a fait:</h4>
+                        <ul class="icon-list">
+                            <li>Lecture de 2 documents de 80 pages (scannés)</li>
+                            <li>Extraction informations pertinentes</li>
+                            <li>Remplissage grille d'analyse comparative</li>
+                            <li>Identification conformités/écarts</li>
+                            <li>Génération questions de clarification</li>
+                            <li>Recommandation argumentée</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--bleu); margin-bottom: 15px;">⏱️ Gain de temps:</h4>
+                        <div style="background: var(--gris-pale); padding: 25px; border-radius: 12px; text-align: center;">
+                            <p style="font-size: 20px; margin-bottom: 15px;">Tâche manuelle traditionnelle:</p>
+                            <div style="font-size: 48px; font-weight: 700; color: var(--orange);">4-6 heures</div>
+                            <p style="font-size: 20px; margin: 20px 0;">Avec IA MUNIA:</p>
+                            <div style="font-size: 48px; font-weight: 700; color: var(--vert-munia);">&lt; 1 minute</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8 - Étapes 5 et 6 -->
+        <div class="slide">
+            <div class="slide-header">
+                <img src="https://raw.githubusercontent.com/mtozzi-munia/marketing/main/assets/logo-rect-black.png" alt="Munia" class="logo">
+            </div>
+            <div class="slide-content">
+                <h1 class="slide-title">ÉTAPES 5 & 6 : DOCUMENTS DÉCISIONNELS</h1>
+                <h2 class="slide-subtitle">Production automatisée de documents conformes</h2>
+                <div class="comparison-table">
+                    <div>
+                        <div class="step-box">
+                            <h4>📄 ÉTAPE 5: Sommaire décisionnel</h4>
+                            <p><strong>Objectif:</strong> Synthétiser l'analyse pour les décideurs</p>
+                            <p style="margin-top: 15px;"><strong>
+                                Génération IA:</strong></p>
+                                <ul class="icon-list">
+                                    <li>Document professionnel structuré</li>
+                                    <li>Sans fautes, mise en page soignée</li>
+                                    <li>Synthèse de toute l'analyse précédente</li>
+                                    <li>Prêt à soumettre aux élus</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="step-box">
+                                <h4>⚖️ ÉTAPE 6: Résolution</h4>
+                                <p><strong>Objectif:</strong> Produire une résolution conforme aux standards légaux</p>
+                                <p style="margin-top: 15px;"><strong>Collaboration Ferland et Boileau:</strong></p>
+                                <ul class="icon-list">
+                                    <li>Format standardisé du cabinet juridique</li>
+                                    <li>Références légales intégrées</li>
+                                    <li>Recherche auto sur LégisQuébec</li>
+                                    <li>Exemples d'autres municipalités</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accent-box" style="margin-top: 20px;">
+                        <p style="text-align: center; font-weight: 600; font-size: 20px;">
+                            💡 Personnalisation possible: chaque municipalité peut adapter les assistants à ses propres modèles et standards
+                        </p>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Slide 9 - Gains mesurables -->
+            <div class="slide">
+                <div class="slide-header">
+                    <img src="https://raw.githubusercontent.com/mtozzi-munia/marketing/main/assets/logo-rect-black.png" alt="Munia" class="logo">
+                </div>
+                <div class="slide-content">
+                    <h1 class="slide-title">GAINS MESURABLES</h1>
+                    <h2 class="slide-subtitle">Retour sur investissement démontré</h2>
+                    <div class="accent-box" style="background: var(--vert-munia); color: var(--blanc);">
+                        <h3 style="margin-bottom: 15px; color: var(--blanc);">📊 Étude MIT 2024</h3>
+                        <div class="stat-big" style="color: var(--blanc);">+37%</div>
+                        <p style="text-align: center; font-size: 24px;">de productivité avec l'IA générative en administration</p>
+                    </div>
+                    <div class="grid-3" style="margin-top: 30px;">
+                        <div class="info-box">
+                            <h4>⏰ Temps gagné</h4>
+                            <div class="amount">2h/jour</div>
+                            <p>par employé municipal</p>
+                        </div>
+                        <div class="info-box">
+                            <h4>💰 Économie annuelle</h4>
+                            <div class="amount">16 800\$</div>
+                            <p>par employé (valeur productive)</p>
+                        </div>
+                        <div class="info-box">
+                            <h4>😊 Bien-être</h4>
+                            <div class="amount">↑↑</div>
+                            <p>Moins de répétitif, plus de valeur ajoutée</p>
+                        </div>
+                    </div>
+                    <div class="accent-box" style="margin-top: 30px;">
+                        <h3 style="color: var(--bleu); margin-bottom: 15px;">🎯 Impact multiplicateur</h3>
+                        <p>Ces gains se multiplient sur l'ensemble des services municipaux: greffe, urbanisme, RH, communication, travaux publics, finances...</p>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Slide 10 - Conformité Loi 25 -->
+            <div class="slide">
+                <div class="slide-header">
+                    <img src="https://raw.githubusercontent.com/mtozzi-munia/marketing/main/assets/logo-rect-black.png" alt="Munia" class="logo">
+                </div>
+                <div class="slide-content">
+                    <h1 class="slide-title">CONFORMITÉ ET SÉCURITÉ</h1>
+                    <h2 class="slide-subtitle">Loi 25 : notre priorité absolue</h2>
+                    <div class="accent-box" style="background: var(--bleu); color: var(--blanc);">
+                        <h3 style="color: var(--blanc); margin-bottom: 15px;">⚠️ Le risque des solutions grand public</h3>
+                        <p style="font-size: 20px;">ChatGPT, Copilot et autres hébergent vos données sur des serveurs américains (Texas). Risque majeur de non-conformité à la Loi 25.</p>
+                    </div>
+                    <div class="grid-2" style="margin-top: 30px;">
+                        <div>
+                            <h4 style="color: var(--vert-munia); margin-bottom: 15px; font-size: 24px;">✓ Garanties MUNIA</h4>
+                            <ul class="icon-list">
+                                <li><strong>Hébergement 100% québécois</strong> (Beauharnois)</li>
+                                <li><strong>Chiffrement</strong> en transit et au repos</li>
+                                <li><strong>Silos de données</strong> par utilisateur</li>
+                                <li><strong>Aucun entraînement</strong> des modèles sur vos données</li>
+                                <li><strong>Conformité totale</strong> Loi 25</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div style="background: var(--gris-pale); padding: 30px; border-radius: 12px; height: 100%;">
+                                <h4 style="color: var(--noir); margin-bottom: 20px;">💬 Citation du webinaire</h4>
+                                <p style="font-style: italic; font-size: 18px; line-height: 1.8;">
+                                    « Toutes vos données ne sont pas hébergées aux États-Unis. Avec ChatGPT, vos données s'en vont sur des serveurs au Texas. Nous, on héberge tout au Québec, conforme à la Loi 25. »
+                                </p>
+                                <p style="margin-top: 15px; font-weight: 600;">— Marc Tozzi</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Slide 11 - Adaptabilité -->
+            <div class="slide">
+                <div class="slide-header">
+                    <img src="https://raw.githubusercontent.com/mtozzi-munia/marketing/main/assets/logo-rect-black.png" alt="Munia" class="logo">
+                </div>
+                <div class="slide-content">
+                    <h1 class="slide-title">ADAPTABILITÉ ET PERSONNALISATION</h1>
+                    <h2 class="slide-subtitle">Une solution modulaire pour chaque municipalité</h2>
+                    <div class="comparison-table">
+                        <div>
+                            <div class="accent-box">
+                                <h3 style="color: var(--bleu); margin-bottom: 15px;">🔧 Flexibilité</h3>
+                                <ul class="icon-list">
+                                    <li>Assistants pré-paramétrés disponibles</li>
+                                    <li>Personnalisation selon vos standards</li>
+                                    <li>Intégration de vos documents internes</li>
+                                    <li>Formats adaptés (résolutions, sommaires...)</li>
+                                </ul>
+                            </div>
+                            <div class="accent-box" style="margin-top: 20px;">
+                                <h3 style="color: var(--bleu); margin-bottom: 15px;">🤖 Modèles IA optimaux</h3>
+                                <p><strong>Claude (Anthropic):</strong> Analyse de documents</p>
+                                <p><strong>ChatGPT (OpenAI):</strong> Polyvalence</p>
+                                <p><strong>Gemini (Google):</strong> Besoins spécifiques</p>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="accent-box">
+                                <h3 style="color: var(--bleu); margin-bottom: 15px;">📚 Assistants disponibles</h3>
+                                <ul class="icon-list" style="font-size: clamp(14px, 2vw, 18px);">
+                                    <li>Assistant Recherche d'information</li>
+                                    <li>Assistant Rédaction devis technique</li>
+                                    <li>Assistant Création grille d'analyse</li>
+                                    <li>Assistant Comparateur d'offres</li>
+                                    <li>Assistant Sommaire décisionnel</li>
+                                    <li>Assistant Générateur de résolution</li>
+                                    <li>+ Assistants personnalisés sur demande</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background: var(--gris-pale); padding: 25px; border-radius: 12px; text-align: center; margin-top: 20px;">
+                        <p style="font-size: 22px; font-weight: 600;">
+                            💡 Solution du cas par cas : chaque municipalité a des besoins uniques
+                        </p>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Slide 12 - Au-delà de l'appro -->
+            <div class="slide">
+                <div class="slide-header">
+                    <img src="https://raw.githubusercontent.com/mtozzi-munia/marketing/main/assets/logo-rect-black.png" alt="Munia" class="logo">
+                </div>
+                <div class="slide-content">
+                    <h1 class="slide-title">AU-DELÀ DE L'APPROVISIONNEMENT</h1>
+                    <h2 class="slide-subtitle">247 processus municipaux optimisables</h2>
+                    <div class="accent-box" style="background: var(--bleu); color: var(--blanc); margin-bottom: 30px;">
+                        <p style="font-size: 22px; text-align: center;">
+                            Le webinaire s'est concentré sur l'approvisionnement, mais l'IA peut transformer l'ensemble de vos opérations municipales
+                        </p>
+                    </div>
+                    <div class="grid-2">
+                        <div>
+                            <div class="step-box">
+                                <h4>🏛️ Greffe</h4>
+                                <p>Rédaction PV, résolutions types, gestion documentaire</p>
+                            </div>
+                            <div class="step-box">
+                                <h4>🏗️ Urbanisme</h4>
+                                <p>Recherche règlementaire, réponses FAQ, vérifications conformité</p>
+                            </div>
+                            <div class="step-box">
+                                <h4>👥 Ressources humaines</h4>
+                                <p>Offres d'emploi, guides internes, FAQ employés</p>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="step-box">
+                                <h4>📣 Communication</h4>
+                                <p>Infolettres, publications réseaux sociaux, communiqués</p>
+                            </div>
+                            <div class="step-box">
+                                <h4>🚧 Travaux publics</h4>
+                                <p>Rapports terrain, planification interventions</p>
+                            </div>
+                            <div class="step-box">
+                                <h4>💰 Finances</h4>
+                                <p>Analyse chiffriers Excel, rapports budgétaires</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accent-box" style="margin-top: 30px;">
+                        <p style="text-align: center; font-weight: 600; font-size: 20px;">
+                            🎯 Résultat: 15 à 25 heures/semaine libérées par service pour du contact humain de qualité
+                        </p>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Slide 13 - Témoignages -->
+            <div class="slide">
+                <div class="slide-header">
+                    <img src="https://raw.githubusercontent.com/mtozzi-munia/marketing/main/assets/logo-rect-black.png" alt="Munia" class="logo">
+                </div>
+                <div class="slide-content">
+                    <h1 class="slide-title">TÉMOIGNAGES ET COLLABORATIONS</h1>
+                    <h2 class="slide-subtitle">Municipalités pionnières</h2>
+                    <div class="grid-2">
+                        <div>
+                            <div class="accent-box">
+                                <h3 style="color: var(--vert-munia); margin-bottom: 15px;">🏆 Mascouche</h3>
+                                <p>Collaboration active dans le développement de l'assistant d'approvisionnement. Intégration des politiques internes et LCOM.</p>
+                            </div>
+                            <div class="accent-box" style="margin-top: 20px;">
+                                <h3 style="color: var(--vert-munia); margin-bottom: 15px;">⚖️ Ferland et Boileau</h3>
+                                <p>Partenariat pour développer un générateur de résolutions conforme aux standards juridiques du cabinet. Utilisable par plusieurs municipalités clientes.</p>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="accent-box" style="background: var(--gris-pale); padding: 30px;">
+                                <h3 style="color: var(--bleu); margin-bottom: 20px;">💬 Jean-Sébastien Ménard</h3>
+                                <p style="font-style: italic; margin-bottom: 15px;">Directeur général, présent au webinaire</p>
+                                <p>Première municipalité à avoir fait confiance à Carange Solutions. A permis de lancer l'aventure dans le monde municipal.</p>
+                                <p style="margin-top: 15px; font-weight: 600;">Formations réalisées:</p>
+                                <ul class="icon-list">
+                                    <li>Équipe de direction</li>
+                                    <li>Employés municipaux</li>
+                                    <li>Élus</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background: var(--vert-munia); color: var(--blanc); padding: 25px; border-radius: 12px; text-align: center; margin-top: 30px;">
+                        <p style="font-size: 24px; font-weight: 600;">
+                            80 à 90 municipalités nous font confiance à travers le Québec
+                        </p>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Slide 14 - Accompagnement -->
+            <div class="slide">
+                <div class="slide-header">
+                    <img src="https://raw.githubusercontent.com/mtozzi-munia/marketing/main/assets/logo-rect-black.png" alt="Munia" class="logo">
+                </div>
+                <div class="slide-content">
+                    <h1 class="slide-title">ACCOMPAGNEMENT ET SERVICES</h1>
+                    <h2 class="slide-subtitle">Une démarche complète et structurée</h2>
+                    <div class="grid-2">
+                        <div>
+                            <div class="step-box">
+                                <h4>1️⃣ Formations IA</h4>
+                                <ul class="icon-list">
+                                    <li>Formation équipes de direction</li>
+                                    <li>Formation employés municipaux</li>
+                                    <li>Formation élus</li>
+                                    <li>Approche pédagogique adaptée</li>
+                                </ul>
+                            </div>
+                            <div class="step-box" style="margin-top: 20px;">
+                                <h4>2️⃣ Consultation personnalisée</h4>
+                                <ul class="icon-list">
+                                    <li>Analyse besoins internes</li>
+                                    <li>Identification processus à optimiser</li>
+                                    <li>Recommandations sur mesure</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="step-box">
+                                <h4>3️⃣ Intégration MUNIA</h4>
+                                <ul class="icon-list">
+                                    <li>Licences adaptées aux besoins</li>
+                                    <li>Configuration assistants personnalisés</li>
+                                    <li>Support technique continu</li>
+                                    <li>Webinaires bimensuels</li>
+                                </ul>
+                            </div>
+                            <div class="step-box" style="margin-top: 20px;">
+                                <h4>4️⃣ Audits conformité</h4>
+                                <ul class="icon-list">
+                                    <li>Vérification Loi 25</li>
+                                    <li>Recommandations d'amélioration</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Slide 15 - Q&A du webinaire -->
+            <div class="slide">
+                <div class="slide-header">
+                    <img src="https://raw.githubusercontent.com/mtozzi-munia/marketing/main/assets/logo-rect-black.png" alt="Munia" class="logo">
+                </div>
+                <div class="slide-content">
+                    <h1 class="slide-title">QUESTIONS CLÉS DU WEBINAIRE</h1>
+                    <h2 class="slide-subtitle">Préoccupations des municipalités</h2>
+                    <div class="step-box">
+                        <h4>❓ Confidentialité des documents déposés sur l'IA?</h4>
+                        <p><strong>Réponse:</strong> Tous les documents sont chiffrés en transit et au repos. Hébergement québécois (Beauharnois). Silos de données par utilisateur. Conformité totale Loi 25. Aucun partage de données.</p>
+                    </div>
+                    <div class="step-box">
+                        <h4>❓ Précision des résultats (exemple: analyse de tableaux complexes)?</h4>
+                        <p><strong>Réponse:</strong> Dépend de plusieurs facteurs: qualité des données, propreté du fichier, façon de communiquer avec l'IA, modèle utilisé. Claude (Anthropic) est très performant pour l'analyse documentaire. Approche du cas par cas selon besoins.</p>
+                    </div>
+                    <div class="step-box">
+                        <h4>❓ Personnalisation aux standards municipaux?</h4>
+                        <p><strong>Réponse:</strong> OUI. Chaque municipalité peut adapter les assistants à ses propres formats (résolutions, sommaires décisionnels, politiques internes). Solution modulaire et flexible.</p>
+                    </div>
+                    <div class="accent-box" style="margin-top: 20px;">
+                        <p style="text-align: center; font-weight: 600;">
+                            💡 L'approche de Carange Solutions : du cas par cas, adapté à la taille et aux besoins de chaque municipalité
+                        </p>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Slide 16 - Offre promotionnelle -->
+            <div class="slide">
+                <div class="slide-header">
+                    <img src="https://raw.githubusercontent.com/mtozzi-munia/marketing/main/assets/logo-rect-black.png" alt="Munia" class="logo">
+                </div>
+                <div class="slide-content">
+                    <h1 class="slide-title">OFFRE EXCLUSIVE</h1>
+                    <h2 class="slide-subtitle">Suite au webinaire</h2>
+                    <div class="accent-box" style="background: var(--vert-munia); color: var(--blanc); text-align: center; padding: 40px;">
+                        <h3 style="color: var(--blanc); font-size: clamp(24px, 4vw, 36px); margin-bottom: 30px;">
+                            🎁 Séance de consultation GRATUITE
+                        </h3>
+                        <p style="font-size: 22px; line-height: 1.8;">
+                            ✓ Rencontre avec Marc Tozzi<br>
+                            ✓ Analyse de vos besoins spécifiques<br>
+                            ✓ Démonstration personnalisée de MUNIA<br>
+                            ✓ Identification des processus à optimiser<br>
+                            ✓ Estimation des gains potentiels
+                        </p>
+                    </div>
+                    <div class="grid-2" style="margin-top: 30px;">
+                        <div class="info-box">
+                            <h4>📧 Par courriel</h4>
+                            <p style="margin-top: 15px;">Contacter directement l'équipe via</p>
+                            <p style="font-weight: 600; color: var(--vert-munia); margin-top: 10px;">carangesolutions.com</p>
+                        </div>
+                        <div class="info-box">
+                            <h4>📺 Ressources</h4>
+                            <p style="margin-top: 15px;">Vidéos explicatives disponibles sur YouTube</p>
+                            <p style="font-weight: 600; color: var(--bleu); margin-top: 10px;">Lien partagé durant le webinaire</p>
+                        </div>
+                    </div>
+                    <div style="background: var(--gris-pale); padding: 25px; border-radius: 12px; text-align: center; margin-top: 30px;">
+                        <p style="font-size: 20px; font-weight: 600;">
+                            📅 Prochains webinaires mensuels — Restez à l'affût!
+                        </p>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Slide 17 - Conclusion -->
+            <div class="slide">
+                <div class="slide-header">
+                    <img src="https://raw.githubusercontent.com/mtozzi-munia/marketing/main/assets/logo-rect-black.png" alt="Munia" class="logo">
+                </div>
+                <div class="slide-content">
+                    <h1 class="slide-title">CONCLUSION</h1>
+                    <h2 class="slide-subtitle">Une transformation nécessaire et accessible</h2>
+                    <div class="comparison-table">
+                        <div>
+                            <div class="accent-box">
+                                <h3 style="color: var(--vert-munia); margin-bottom: 15px;">✓ Bénéfices tangibles</h3>
+                                <ul class="icon-list">
+                                    <li>Gain temps massif (37% minimum)</li>
+                                    <li>Qualité des livrables améliorée</li>
+                                    <li>Conformité Loi 25 assurée</li>
+                                    <li>Bien-être employés accru</li>
+                                    <li>Meilleur service aux citoyens</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="accent-box">
+                                <h3 style="color: var(--bleu); margin-bottom: 15px;">🛡️ Risques maîtrisés</h3>
+                                <ul class="icon-list">
+                                    <li>Hébergement québécois</li>
+                                    <li>Respect cadres légaux</li>
+                                    <li>Contrôle humain maintenu</li>
+                                    <li>Solution adaptable</li>
+                                    <li>Accompagnement complet</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background: var(--vert-munia); color: var(--blanc); padding: 40px; border-radius: 12px; text-align: center; margin-top: 30px;">
+                        <p style="font-size: 28px; font-weight: 700; margin-bottom: 20px;">
+                            LA MISSION DE CARANGE SOLUTIONS
+                        </p>
+                        <p style="font-size: 24px; line-height: 1.8; font-style: italic;">
+                            « Utiliser le dollar du citoyen québécois en accompagnant les municipalités à produire plus avec moins. »
+                        </p>
+                    </div>
+                    <div class="accent-box" style="margin-top: 30px; text-align: center;">
+                        <p style="font-size: 22px; font-weight: 600;">
+                            🚀 L'IA n'est pas une menace, c'est un levier de performance pour les municipalités québécoises
+                        </p>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-button" id="prevBtn" onclick="changeSlide(-1)">← Précédent</button>
+            <button class="nav-button" id="nextBtn" onclick="changeSlide(1)">Suivant →</button>
+        </div>
+    
+        <!-- Indicateur de slide -->
+        <div class="slide-indicator" id="slideIndicator">1 / 17</div>
+    
+        <script>
+            let currentSlide = 0;
+            const slides = document.querySelectorAll('.slide');
+            const totalSlides = slides.length;
+    
+            function showSlide(n) {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (n + totalSlides) % totalSlides;
+                slides[currentSlide].classList.add('active');
+                
+                document.getElementById('slideIndicator').textContent = `${currentSlide + 1} / ${totalSlides}`;
+                
+                document.getElementById('prevBtn').disabled = currentSlide === 0;
+                document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+            }
+    
+            function changeSlide(direction) {
+                showSlide(currentSlide + direction);
+            }
+    
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    e.preventDefault();
+                    if (currentSlide < totalSlides - 1) changeSlide(1);
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    if (currentSlide > 0) changeSlide(-1);
+                }
+            });
+    
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.navigation')) {
+                    if (e.clientX > window.innerWidth / 2) {
+                        if (currentSlide < totalSlides - 1) changeSlide(1);
+                    } else {
+                        if (currentSlide > 0) changeSlide(-1);
+                    }
+                }
+            });
+    
+            showSlide(0);
+        </script>
+    </body>
+    </html>
